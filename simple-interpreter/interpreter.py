@@ -2,7 +2,7 @@
 #
 # EOF (end-of-file) token is used to indicate that
 # there is no more input left for lexical analysis
-INTEGER, PLUS, EOF = 'INTEGER', 'PLUS', 'EOF'
+INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 
 
 class Token(object):
@@ -18,6 +18,7 @@ class Token(object):
         Examples:
             Token(INTEGER, 3)
             Token(PLUS '+')
+            Token(MINUS '-')
         """
         return 'Token({type}, {value})'.format(
             type=self.type,
@@ -84,6 +85,11 @@ class Interpreter(object):
             self.pos += 1
             return token
 
+        if current_char == '-':
+            token = Token(MINUS, current_char)
+            self.pos += 1
+            return token
+
         self.error()
 
     def eat(self, token_type):
@@ -107,7 +113,7 @@ class Interpreter(object):
 
         # we expect the current token to be a '+' token
         op = self.current_token
-        self.eat(PLUS)
+        self.eat(MINUS)
 
         # we expect the current token to be a single-digit integer
         right = self.current_token
@@ -119,7 +125,7 @@ class Interpreter(object):
         # has been successfully found and the method can just
         # return the result of adding two integers, thus
         # effectively interpreting client input
-        result = left.value + right.value
+        result = left.value - right.value
         return result
 
 
