@@ -40,12 +40,20 @@ class Interpreter(object):
     def error(self):
         raise Exception('Error parsing input')
 
+    def skip_whitespaces(self):
+        """Skips whitespaces"""
+        while self.pos < len(self.text) and self.text[self.pos] == " ":
+            self.pos += 1
+
     def get_next_token(self):
         """Lexical analyzer (also known as scanner or tokenizer)
 
         This method is responsible for breaking a sentence
         apart into tokens. One token at a time.
         """
+        # skip whitespaces before processing
+        self.skip_whitespaces()
+
         text = self.text
 
         # is self.pos index past the end of the self.text ?
