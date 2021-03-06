@@ -121,12 +121,12 @@ class Interpreter(object):
         # we expect the current token to be a single-digit integer
         result = self.term()
 
-        while self.current_token.value is not None:
+        while self.current_token.type in (PLUS, MINUS):
             op = self.current_token
             if op.type == PLUS:
                 self.eat(PLUS)
                 result += self.term()
-            else:
+            elif op.type == MINUS:
                 self.eat(MINUS)
                 result -= self.term()
         return result
