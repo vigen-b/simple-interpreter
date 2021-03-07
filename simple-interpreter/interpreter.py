@@ -75,21 +75,21 @@ class Interpreter(object):
             if self.current_char.isdigit():
                 return Token(INTEGER, self.integer())
 
-            if self.current_char == '+':
-                self.advance()
-                return Token(PLUS, '+')
-
-            if self.current_char == '-':
-                self.advance()
-                return Token(MINUS, '-')
-
-            # if self.current_char == '*':
+            # if self.current_char == '+':
             #     self.advance()
-            #     return Token(MULTIPLY, '*')
+            #     return Token(PLUS, '+')
             #
-            # if self.current_char == '/':
+            # if self.current_char == '-':
             #     self.advance()
-            #     return Token(DIVISION, '/')
+            #     return Token(MINUS, '-')
+
+            if self.current_char == '*':
+                self.advance()
+                return Token(MULTIPLY, '*')
+
+            if self.current_char == '/':
+                self.advance()
+                return Token(DIVISION, '/')
 
             self.error()
         return Token(EOF, None)
@@ -121,14 +121,14 @@ class Interpreter(object):
         # we expect the current token to be a single-digit integer
         result = self.term()
 
-        while self.current_token.type in (PLUS, MINUS):
+        while self.current_token.type in (MULTIPLY, DIVISION):
             op = self.current_token
-            if op.type == PLUS:
-                self.eat(PLUS)
-                result += self.term()
-            elif op.type == MINUS:
-                self.eat(MINUS)
-                result -= self.term()
+            if op.type == MULTIPLY:
+                self.eat(MULTIPLY)
+                result = result * self.term()
+            elif op.type == DIVISION:
+                self.eat(DIVISION)
+                result = result / self.term()
         return result
 
 
